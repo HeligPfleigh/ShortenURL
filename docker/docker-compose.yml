@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  shortenurl:
+    image: shortenurl
+    build:
+      context: ..
+    ports:
+      - 3000:3000
+      - 9229:9229
+
+  mongo:
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: tQpK9lRGzP
+      MONGO_INITDB_DATABASE: url
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./data:/data/db:rw"
+      - "./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js"
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: tQpK9lRGzP
+      # ME_CONFIG_MONGODB_SERVER: mongo
+      # ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "false" # should be false
+      ME_CONFIG_MONGODB_AUTH_DATABASE: url
+      ME_CONFIG_MONGODB_AUTH_USERNAME: admin
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: CqjUMJX12R
