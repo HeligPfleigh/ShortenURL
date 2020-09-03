@@ -13,7 +13,7 @@
       "request": "launch",
       "name": "Next: Node",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": ["docker:dev"],
       "port": 9229,
       "console": "integratedTerminal"
     }
