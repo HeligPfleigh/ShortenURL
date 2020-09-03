@@ -4,8 +4,10 @@ services:
     image: shortenurl
     build:
       context: ..
+    volumes:
+      - "../:/app"
     ports:
-      - 3000:3000
+      - 5000:5000
       - 9229:9229
 
   mongo:

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev -p 5000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "docker:dev": "docker-compose -f ./docker/docker-compose.yml up --build"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",

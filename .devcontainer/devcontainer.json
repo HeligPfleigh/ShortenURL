@@ -1,0 +1,17 @@
+{
+  "name": "Shorten URL",
+  "dockerComposeFile": "../docker/docker-compose.yml",
+  "service": "shortenurl",
+
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+
+  "workspaceFolder": "/",
+
+  "remoteEnv": {},
+
+  "forwardPorts": [5000, 9229],
+
+  "remoteUser": "node"
+}
