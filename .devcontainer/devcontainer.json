@@ -3,11 +3,7 @@
   "dockerComposeFile": "../docker/docker-compose.yml",
   "service": "shortenurl",
 
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
-  },
-
-  "workspaceFolder": "/",
+  "workspaceFolder": "/app",
 
   "remoteEnv": {},
 
