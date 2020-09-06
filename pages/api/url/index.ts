@@ -18,7 +18,7 @@ handler.get(async (_req: NextApiRequest, res: NextApiResponse) => {
   try {
     const data = await ShortenURLModel.find();
     res.statusCode = 200;
-    res.json({ data });
+    res.json(data);
   } catch (error) {
     res.statusCode = 400;
     res.json({ error });

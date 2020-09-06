@@ -1,55 +1,62 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/styles";
-import { blue } from "@material-ui/core/colors";
 import {
   TextField,
   Button,
-  Theme,
   Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   IconButton,
+  Snackbar,
 } from "@material-ui/core";
 import FileCopyTwoToneIcon from "@material-ui/icons/FileCopyTwoTone";
-import axios from "axios";
+import Alert, { AlertProps } from "@material-ui/lab/Alert";
+import { mutate } from "swr";
 
 import { server } from "../src/config";
+import URLTable from "../src/components/URLTable";
+import { shortenLink } from "../src/api";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  shortenSection: {
-    backgroundColor: blue[400],
-    color: "white",
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-}));
+interface ISnackInfo {
+  severity?: AlertProps["severity"];
+  message?: string;
+}
 
 export default function Index() {
-  const classes = useStyles();
   const [shortendURL, setShortenURL] = useState<string>("");
   const [originalUrl, setOriginalUrl] = useState<string>("");
+  const [snack, setSnack] = useState<ISnackInfo>({});
 
   const handleShortenURL = async () => {
     try {
       const {
         data: { shortUrl },
-      } = await axios.post(`${server}/api/url`, {
-        originalUrl,
-      });
-
+      } = await shortenLink(originalUrl);
+      mutate("/api/user");
       setShortenURL(`${server}${shortUrl}`);
-    } catch (error) {}
+    } catch (error) {
+      setSnack({
+        severity: "error",
+        message: "Fail to shorten your URL!",
+      });
+    }
   };
 
   const handleCloseDialog = () => setShortenURL("");
 
-  const copyToClipboard = () => navigator.clipboard.writeText(shortendURL);
+  const copyURLToClipboard = (url: string) => {
+    navigator.clipboard.writeText(url);
+    setSnack({
+      severity: "info",
+      message: "URL copied!",
+    });
+  };
+
+  const handleCloseSnackbar = () => setSnack({});
 
   return (
     <Container>
@@ -73,13 +80,10 @@ export default function Index() {
           <Button onClick={handleShortenURL}>Shorten URL</Button>
         </Grid>
       </Grid>
-      <Dialog
-        fullWidth
-        open={Boolean(shortendURL)}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
+      <Box mt={4}>
+        <URLTable onCopy={(url: string) => copyURLToClipboard(url)} />
+      </Box>
+      <Dialog fullWidth open={Boolean(shortendURL)} onClose={handleCloseDialog}>
         <DialogTitle id="alert-dialog-title">Your shorten URL</DialogTitle>
         <DialogContent>
           <Grid container spacing={1} alignItems="center">
@@ -92,7 +96,10 @@ export default function Index() {
               />
             </Grid>
             <Grid item xs={1}>
-              <IconButton aria-label="copy" onClick={copyToClipboard}>
+              <IconButton
+                aria-label="copy"
+                onClick={() => copyURLToClipboard(shortendURL)}
+              >
                 <FileCopyTwoToneIcon />
               </IconButton>
             </Grid>
@@ -104,6 +111,14 @@ export default function Index() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={Boolean(snack.severity)}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity={snack.severity}>{snack.message}</Alert>
+      </Snackbar>
     </Container>
   );
 }

@@ -11,15 +11,19 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@types/axios": "^0.14.0",
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
+    "date-fns": "^2.16.1",
+    "material-table": "^1.69.0",
     "mongoose": "^5.10.3",
     "nanoid": "^3.1.12",
     "next": "9.5.3",
     "next-connect": "^0.8.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "swr": "^0.3.2",
     "yup": "^0.29.3"
   },
   "devDependencies": {
